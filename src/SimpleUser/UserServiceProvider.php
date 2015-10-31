@@ -92,6 +92,9 @@ class UserServiceProvider implements ServiceProviderInterface, ControllerProvide
                 'attribute' => 'attribute',
                 'value' => 'value',
             ),
+            
+            'availableLocales' => array('en_EN', 'pl_PL'),
+            
         );
 
         // Initialize $app['user.options'].
@@ -184,6 +187,33 @@ class UserServiceProvider implements ServiceProviderInterface, ControllerProvide
             return $mailer;
         });
 
+        $app['translator'] = $app->extend('translator', function($translator) {
+
+            $appCurrentlocale = $translator->getLocale();
+            
+            // if app locale is in a short form (e.g. en, de, pl) transform it to valid culture code (en_EN)
+            $localeCodeLen = strlen($appCurrentlocale);
+            if($localeCodeLen===2)
+                $cultureCode = strtolower($appCurrentlocale) . '_' . strtoupper($appCurrentlocale);
+            elseif($localeCodeLen===5) 
+                $cultureCode = $appCurrentlocale;
+            else
+                $cultureCode = 'en-EN';
+            
+            // if there is no translation for determined lang, switch to en_EN as default
+            if(!is_dir(__DIR__."/translations/$cultureCode"))
+                $cultureCode = 'en-EN';
+            
+            // load User Service Provider translations
+            $translator->addLoader('yaml', new \Symfony\Component\Translation\Loader\YamlFileLoader());
+
+            foreach (glob(__DIR__.'/translations/'. $cultureCode . '/*.yml') as $translationFile) {
+                $translator->addResource('yaml', $translationFile, $cultureCode);
+            }
+            
+            return $translator;
+        });
+        
         // Add a custom security voter to support testing user attributes.
         $app['security.voters'] = $app->extend('security.voters', function($voters) use ($app) {
             foreach ($voters as $voter) {

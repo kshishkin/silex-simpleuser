@@ -54,6 +54,18 @@ Set up your Silex application something like this:
     $app->register(new Provider\UrlGeneratorServiceProvider());
     $app->register(new Provider\TwigServiceProvider());
     $app->register(new Provider\SwiftmailerServiceProvider());
+    $app->register(new Provider\TranslationServiceProvider(), array(
+        'locale_fallbacks' => array('en-EN', 'pl-PL'),
+    ));
+
+    // locale session storage
+    $currentLocale = 'en-EN';
+    if ($app['session']->get('current_language')) {
+        $currentLocale = $app['session']->get('current_language');
+    }
+    //
+    /* sets current language */
+    $app['translator']->setLocale($currentLocale);
 
     // Register the SimpleUser service provider.
     $simpleUserProvider = new SimpleUser\UserServiceProvider();
@@ -68,11 +80,22 @@ Set up your Silex application something like this:
     // Mount the user controller routes:
     $app->mount('/user', $simpleUserProvider);
 
-    /*
-    // Other routes and controllers...
+
+
+
+    /* Other routes and controllers...
+
+    // main page
     $app->get('/', function () use ($app) {
         return $app['twig']->render('index.twig', array());
     });
+
+    // switch language
+    $app->match('/{lang}/', function ($lang) use ($app) {
+
+                $app['session']->set('current_language', $lang);
+                return $app->redirect($_SERVER['HTTP_REFERER']);
+    })->assert('lang','[\w-]{2,5}');
     */
 
     // ...

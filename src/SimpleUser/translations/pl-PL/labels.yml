@@ -1,0 +1,99 @@
+user:
+    List users: Użytkownicy
+    Toggle navigation: Przełącz Nawigację
+    Create account: Zarejestruj
+    Sign in: Zaloguj
+    View your profile: Zobacz profil
+    Edit your profile: Edytuj profil
+    Sign out: Wyloguj
+    username: nazwa użytkownika
+    email: email
+    password: hasło
+    remember: Zapamiętaj mnie na tym komputerze
+    not_registerd_question: Nie masz konta?
+    forgot_password_question: Nie pamiętasz hasła?
+    create_now: zarejestruj teraz
+    
+    #register
+    create_account: utwórz konto
+    already_have_account_question: masz już konto?
+    public_name: nazwa
+    public_name_note: pokazywana publicznie
+    never_shared_note: nigdy nie pokazywany
+    retype_password_label: potwierdź hasło
+    confirm_password_label: potwierdź hasło
+    register: zarejestruj
+    sign_in_now: zaloguj teraz
+    
+    #forgot password
+    enter_password_note: Wprowadź swój adres poniżej, wyślemy Ci instrukcję ustawienia nowego hasła.
+    your_email_address: Twój adres email
+    send_me_instructions: Wyślij mi instrukcję ustanowienia nowego hasła
+    backToLogin: Spowrotem do logowania
+    spamboxNote: Jeśli nie dostaniesz wiadomości w ciągu kilku minut, sprawdź folder ze spamem. Nadawcą wiadomości jest 
+    
+    #login-confirmation
+    accountNotYetActiveTitle: Twoje konto nie jest jeszcze aktywne
+    emailSentToAddressNoteWhenRegistered: Email powinien zostać do Ciebie wysłany na adres <strong>%email%</strong> kiedy się zarejestrowaleś.
+    clickLinkInMessageNote: Proszę kliknij w link w treści wiadomości by potwierdzić adres email i aktywować konto.
+    resendTheMessage: Wyślij ponownie
+    checkJunkEmailBox: Upewnij się, że sprawdziłeś folder ze spamem. Nadawcą jest <strong>%fromAddress%</strong>.
+    emailConfirmationNeeded: Potrzebne jest potwierdzenie adresu email. 
+    
+    #registerConfirmation
+    thankYou: Dziękujemy!
+    emailSentToAddress: Email został wysłany na adres <strong>%email%</strong>.
+    
+    #resetPassword
+    chooseNewPassword: Wybierz nowe haslo
+    newPassword: Nowe hasło
+    retypePassword: Wprowadź ponownie hasło
+    savePassword: Zapisz hasło
+    
+    #view
+    edit: edytuj
+    registered: zarejestrowany
+    pendingEmailConfirmation: Oczekuje na potwierdzenie adresu email
+    visibleToAdminsOnly: widoczne tylko dla administratorów
+    
+    #email - confirm-email
+    welcomePleaseConfirmEmail: Witaj! Potwierdź proszę swój email.
+    thanksForJoiningSite: Dziękujemy za dołączenie do użytkowników.
+    pleaseClickLinkBelow: Proszę, kliknij w link poniżej by potwierdzić adres email.
+    pleaseClickLinkHtml: Proszę, <a href="%confirmationUrl%">kliknij tutaj</a> by potwierdzić adres email.
+    
+    #edit
+    editUser: Edytuj profil
+    gravatarImage: Obrazek Gravatar
+    change: Zmień
+    name: Nazwa
+    shownPublicly: Pokazywane publicznie
+    neverShared: Nigdy nie ujawniane
+    leavBlankExceptToChange: Pozostaw puste, chyba że chcesz zmienić
+    adminOnly: Admin-tylko
+    backToProfile: Powrót do profilu
+    save: Zapisz
+    resetYourPassword: Ustaw nowe hasło
+    clickTheLinkToResetYourPassword: Kliknij w link poniżej by ustawić nowe hasło.
+    pleaseClickHereToResetPassword: Proszę <a href="%resetUrl%">kliknij tutaj by ustawić nowe hasło</a>.
+    didntAskToReset: Nie prosiłeś o zmianę hasła?
+    didntAskToResetNote: > 
+        Jeśli nie prosiłeś o zmianę hasła, jest prawdopodobne, 
+        że ktoś inny wprowadził Twoją nazwę użytkownika przez pomyłkę.
+        W takim przypadku możesz spokojnie zignorować tą wiadomość.        
+    #list
+    listUsers: Lista użytkowników
+    oneUserFound: <strong>1</strong> znaleziony użytkownik.
+    numberOfUsersFound: <strong>%totalItems%</strong> znalezieni użytkownicy.
+    showing: Pokazywane
+    pendingConfirmation: Oczekuje na potwierdzenie adresu email.
+    
+    
+langs:
+    en-EN: EN
+    pl-PL: PL
+    de-DE: DE
+
+    en: EN
+    pl: PL
+    de: DE

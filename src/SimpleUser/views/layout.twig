@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app.translator.locale }}">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +14,7 @@
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span>
+                        <span class="sr-only">{{ 'user.Toggle navigation' | trans }}</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -25,7 +25,22 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{{ path('user.list') }}">List users</a></li>
+                        
+                        {% if ( app.translator.fallbackLocales | length ) > 1 %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ ('langs.' ~ app.translator.locale ) | trans }}<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        {% for l in app.translator.fallbackLocales %}
+                                            {% if app.translator.locale != l %}
+                                                <li><a href="{{ '/' ~ l }}">{{ ( 'langs.' ~ l ) | trans }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                    </ul>
+
+                            </li>
+                        {% endif %}
+                        
+                        <li><a href="{{ path('user.list') }}">{{ 'user.listUsers' | trans }}</a></li>
                         {% if app.user %}
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -33,14 +48,14 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{{ path('user') }}"><span class="glyphicon glyphicon-user"></span> View your profile</a></li>
-                                    <li><a href="{{ path('user.edit', { id: app.user.id }) }}"><span class="glyphicon glyphicon-edit"></span> Edit your profile</a></li>
-                                    <li><a href="{{ path('user.logout') }}"><span class="glyphicon glyphicon-off"></span> Sign out</a></li>
+                                    <li><a href="{{ path('user') }}"><span class="glyphicon glyphicon-user"></span> {{ 'user.View your profile' | trans }}</a></li>
+                                    <li><a href="{{ path('user.edit', { id: app.user.id }) }}"><span class="glyphicon glyphicon-edit"></span> {{ 'user.Edit your profile' | trans }}</a></li>
+                                    <li><a href="{{ path('user.logout') }}"><span class="glyphicon glyphicon-off"></span> {{ 'user.Sign out' | trans }}</a></li>
                                 </ul>
                             </li>
                         {% else %}
-                            <li><a href="{{ path('user.login') }}">Sign in</a></li>
-                            <li><a href="{{ path('user.register') }}">Create account</a></li>
+                            <li><a href="{{ path('user.login') }}">{{ 'user.Sign in' | trans }}</a></li>
+                            <li><a href="{{ path('user.register') }}">{{ 'user.Create account' | trans }}</a></li>
                         {% endif %}
                     </ul>
                 </div><!-- /.navbar-collapse -->

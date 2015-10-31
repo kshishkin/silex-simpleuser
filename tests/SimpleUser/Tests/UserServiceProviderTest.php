@@ -16,6 +16,11 @@ class UserServiceProviderTest extends \PHPUnit_Framework_TestCase
             array('security.firewalls' => array('dummy-firewall' => array('form' => array())))
         );
         $app->register(new Provider\DoctrineServiceProvider());
+
+        $app->register(new Provider\TranslationServiceProvider(), array(
+            'locale_fallbacks' => array('en-EN'),
+        ));
+        
         $app->register(new UserServiceProvider(), array(
             'db.options' => array(
                 'driver' => 'pdo_sqlite',
@@ -36,7 +41,10 @@ class UserServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app->register(new Provider\UrlGeneratorServiceProvider());
         $app->register(new Provider\TwigServiceProvider());
         $app->register(new Provider\SwiftmailerServiceProvider());
-
+        $app->register(new Provider\TranslationServiceProvider(), array(
+            'locale_fallbacks' => array('en-EN'),
+        ));
+        
         return $app;
     }
 

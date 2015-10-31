@@ -1,0 +1,103 @@
+user:
+    List users: Users
+    Toggle navigation: Toggle Navigation
+    Create account: Create account
+    Sign in: Sign in
+    View your profile: View your profile
+    Edit your profile: Edit your profile
+    Sign out: Sign out
+    username: username
+    email: email
+    password: password
+    remember: remember me on this computer
+    not_registerd_question: don't have an account?
+    forgot_password_question: forgot password?
+    create_now: register now
+    hello: hello
+    
+    #register
+    alreadyRegistered: Hello, %displayName%. You are already registered and signed in.
+    create_account: create an account
+    already_have_account_question: already have an account?
+    public_name: Name
+    public_name_note: Shown publicly
+    never_shared_note: Never shared
+    retype_password_label: re-type password
+    confirm_password_label: confirm password
+    register: register
+    sign_in_now: Sign in now
+    
+    #forgot password
+    enter_password_note: Enter your email address below and we'll send you password reset instructions.
+    your_email_address: Your email address
+    send_me_instructions: Send me reset instructions
+    backToLogin: Back to login
+    spamboxNote: If you don't get an email within a few minutes, make sure to check your spam or junk folder. The sender is 
+    
+    #login-confirmation
+    accountNotYetActiveTitle: Your account is not yet active
+    emailSentToAddressNoteWhenRegistered: An email should have been sent to you at <strong>%email%</strong> when you registered.
+    clickLinkInMessageNote: Please click the link in that message to confirm your email address and activate your account.
+    resendTheMessage: Resend the message
+    checkJunkEmailBox: Make sure to check your junk or spam folder. The sender is <strong>%fromAddress%</strong>.
+    emailConfirmationNeeded: Email confirmation needed
+    
+    #registerConfirmation
+    thankYou: Thank you!
+    emailSentToAddress: An email has been sent to you at <strong>%email%</strong>.
+    
+    #resetPassword
+    chooseNewPassword: Choose a new password
+    newPassword: New password
+    retypePassword: Re-type password
+    savePassword: Save password
+    
+    #view
+    edit: edit
+    registered: registered
+    pendingEmailConfirmation: Pending email confirmation
+    visibleToAdminsOnly: visible to admins only
+    
+    #email - confirm-email
+    welcomePleaseConfirmEmail: Welcome! Please confirm your email.
+    thanksForJoiningSite: Thanks for joining our site!
+    pleaseClickLinkBelow: Please click the link below to confirm your email
+    pleaseClickLinkHtml: Please <a href="%confirmationUrl%">click here to confirm your email</a>.
+    
+    #edit
+    editUser: Edit User
+    gravatarImage: Gravatar image
+    change: Change
+    name: Name
+    shownPublicly: Shown publicly
+    neverShared: Never shared
+    leavBlankExceptToChange: Leave blank except to change
+    adminOnly: Admin-only
+    backToProfile: Back to profile
+    save: Save
+    resetYourPassword: Reset your password
+    clickTheLinkToResetYourPassword: Click the link below to reset your password
+    pleaseClickHereToResetPassword: Please <a href="%resetUrl%">click here to reset your password</a>.
+    didntAskToReset: Didn't ask to reset your password?
+    didntAskToResetNote: > 
+        If you didn't ask to reset your password, it's likely that
+        another user entered your username or email address by mistake
+        while trying to reset their password. If that's the case, you
+        don't need to take any further action and you can safely
+        disregard this email.
+        
+    #list
+    listUsers: List users
+    oneUserFound: <strong>1</strong> user found.
+    numberOfUsersFound: <strong>%totalItems%</strong> users found.
+    showing: Showing
+    pendingConfirmation: Pending email confirmation
+    
+langs:
+    en-EN: EN
+    pl-PL: PL
+    de-DE: DE
+
+    en: EN
+    pl: PL
+    de: DE

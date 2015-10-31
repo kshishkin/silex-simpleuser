@@ -1,20 +1,20 @@
 {% extends layout_template  %}
 
-{% block title %}Sign in{% endblock %}
+{% block title %}{{ 'user.Sign in' | trans | capitalize }}{% endblock %}
 
 {% block content %}
 
     {% if app.user %}
-        <p>Hello, {{ app.user.displayName }}.</p>
-        <p><a href="{{ path('user.logout') }}">Sign out</a></p>
+        <p>{{ 'user.hello' | trans | capitalize }}, {{ app.user.displayName }}.</p>
+        <p><a href="{{ path('user.logout') }}">{{ 'user.Sign out' | trans }}</a></p>
 
     {% else %}
         <h1>
-            Sign in
+            {{ 'user.Sign in' | trans }}
         </h1>
 
         <p class="text-muted lead">
-            Don't have an account? <a href="{{ path('user.register') }}">Register now.</a>
+            {{ 'user.not_registerd_question' | trans | capitalize }} <a href="{{ path('user.register') }}">{{ 'user.create_now' | trans | capitalize }}</a>
         </p>
 
         {% if error %}
@@ -24,16 +24,16 @@
         <form class="form-horizontal" method="POST" action="{{ path('user.login_check') }}">
 
             <div class="form-group">
-                <label class="col-sm-2 control-label" for="inputEmail">Email</label>
+                <label class="col-sm-2 control-label" for="inputEmail">{{ 'user.email' | trans | capitalize }}</label>
                 <div class="col-sm-6">
-                    <input class="form-control" name="_username" type="text" id="inputEmail" placeholder="Email" required value="{{ last_username }}">
+                    <input class="form-control" name="_username" type="text" id="inputEmail" placeholder="{{ 'user.email' | trans | capitalize }}" required value="{{ last_username }}">
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label" for="inputPassword">Password</label>
+                <label class="col-sm-2 control-label" for="inputPassword">{{ 'user.password' | trans | capitalize }}</label>
                 <div class="col-sm-6">
-                    <input class="form-control" name="_password" type="password" id="inputPassword" required placeholder="Password">
+                    <input class="form-control" name="_password" type="password" id="inputPassword" required placeholder="{{ 'user.password' | trans | capitalize }}">
                 </div>
             </div>
 
@@ -41,7 +41,7 @@
                 <div class="form-group">
                     <div class="col-sm-6 col-sm-offset-2 checkbox">
                         <label>
-                            <input type="checkbox" name="_remember_me" value="true" checked> Remember me on this computer
+                            <input type="checkbox" name="_remember_me" value="true" checked> {{ 'user.remember' | trans | capitalize }}
                         </label>
                     </div>
                 </div>
@@ -49,9 +49,9 @@
 
             <div class="form-group">
                 <div class="col-sm-8 col-sm-offset-2">
-                    <button type="submit" class="btn btn-primary">Sign in</button>
+                    <button type="submit" class="btn btn-primary">{{ 'user.Sign in' | trans | capitalize }}</button>
                     {% if allowPasswordReset %}
-                        <a style="margin-left: 10px;" href="{{ path('user.forgot-password') }}">Forgot your password?</a>
+                        <a style="margin-left: 10px;" href="{{ path('user.forgot-password') }}">{{ 'user.forgot_password_question' | trans | capitalize }}</a>
                     {% endif %}
                 </div>
             </div>
