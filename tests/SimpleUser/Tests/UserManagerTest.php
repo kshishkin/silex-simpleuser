@@ -29,6 +29,9 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
     /** @var EventDispatcher */
     protected $dispatcher;
 
+    /* @var $app Application */
+    protected $app;
+    
     public function setUp()
     {
         $app = new Application();
@@ -44,6 +47,7 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
         $this->userManager = new UserManager($app['db'], $app);
         $this->conn = $app['db'];
         $this->dispatcher = $app['dispatcher'];
+        $this->app = $app;
     }
 
     public function testCreateUser()
@@ -84,10 +88,11 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
 
         $user = $this->userManager->createUser($email, 'password');
         $this->userManager->insert($user);
-        $this->assertEquals($user, $this->userManager->findOneBy(array('email' => $email)));
+        $emailColumn = $this->userManager->getUserColumns('email');
+        $this->assertEquals($user, $this->userManager->findOneBy(array($emailColumn => $email)));
 
         $this->userManager->delete($user);
-        $this->assertNull($this->userManager->findOneBy(array('email' => $email)));
+        $this->assertNull($this->userManager->findOneBy(array($emailColumn => $email)));
     }
 
     public function testCustomFields()
@@ -226,8 +231,9 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
         $user2 = $this->userManager->createUser($email2, 'password');
         $user2->setCustomField($customField, $customVal);
         $this->userManager->insert($user2);
-
-        $criteria = array('email' => $email1);
+        
+        $emailColumn = $this->userManager->getUserColumns('email');
+        $criteria = array($emailColumn => $email1);
         $results = $this->userManager->findBy($criteria);
         $numResults = $this->userManager->findCount($criteria);
         $this->assertCount(1, $results);
@@ -412,7 +418,24 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testChangeUserColumns()
     {
-        $this->userManager->setUserColumns(array('email' => 'foo'));
-        $this->assertEquals('"foo"', $this->userManager->getUserColumns('email'));
+        $this->userManager->setUserColumns(array('email' => 'foo '));
+        $this->assertEquals('"foo "', $this->userManager->getUserColumnsEscaped('email'));
+    }
+    
+    public function testValidationWhenChangedUserColumns()
+    {
+        
+        $statement = file_get_contents(__DIR__ . '/../../../sql/sqlite.sql');
+        $statementModified = str_replace('email', '"foo "', $statement);
+        $this->app['db']->executeUpdate('DROP TABLE user_custom_fields;');
+        $this->app['db']->executeUpdate('DROP TABLE users;');
+        $this->app['db']->executeUpdate($statementModified);
+
+        $this->userManager->setUserColumns(array('email' => 'foo '));
+        
+        $user = $this->userManager->createUser('test@example.com', 'password');
+
+        $errors = $this->userManager->validate($user);
+        $this->assertEmpty($errors);
     }
 }

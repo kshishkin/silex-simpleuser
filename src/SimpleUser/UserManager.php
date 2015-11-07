@@ -456,9 +456,9 @@ class UserManager implements UserProviderInterface
                 $i++;
                 $alias = 'custom' . $i;
                 $sql .= 'JOIN ' . $this->conn->quoteIdentifier($this->userCustomFieldsTableName). ' ' . $alias . ' ';
-                $sql .= 'ON ' . $this->conn->quoteIdentifier($this->userTableName). '.' . $this->getUserColumns('id') . ' = ' . $alias . '.'. $this->getUserColumns('user_id').' ';
-                $sql .= 'AND ' . $alias . '.'.$this->getUserColumns('attribute').' = :attribute' . $i . ' ';
-                $sql .= 'AND ' . $alias . '.'.$this->getUserColumns('value').' = :value' . $i . ' ';
+                $sql .= 'ON ' . $this->conn->quoteIdentifier($this->userTableName). '.' . $this->getUserColumnsEscaped('id') . ' = ' . $alias . '.'. $this->getUserColumnsEscaped('user_id').' ';
+                $sql .= 'AND ' . $alias . '.'.$this->getUserColumnsEscaped('attribute').' = :attribute' . $i . ' ';
+                $sql .= 'AND ' . $alias . '.'.$this->getUserColumnsEscaped('value').' = :value' . $i . ' ';
                 $params['attribute' . $i] = $attribute;
                 $params['value' . $i] = $value;
             }
@@ -469,8 +469,9 @@ class UserManager implements UserProviderInterface
             if ($key == 'customFields') {
                 continue;
             } else {
-                $sql .= ($first_crit ? 'WHERE' : 'AND') . ' ' . $key . ' = :' . $key . ' ';
-                $params[$key] = $val;
+                $param_key = preg_replace('/[^\w]/', '', $key);
+                $sql .= ($first_crit ? 'WHERE' : 'AND') . ' ' . $this->conn->quoteIdentifier($key) . ' = :' . $param_key . ' ';
+                $params[$param_key] = $val;
             }
             $first_crit = false;
         }
@@ -503,9 +504,9 @@ class UserManager implements UserProviderInterface
         $this->dispatcher->dispatch(UserEvents::BEFORE_INSERT, new UserEvent($user));
 
         $sql = 'INSERT INTO ' . $this->conn->quoteIdentifier($this->userTableName) . '
-            ('.$this->getUserColumns('email').', '.$this->getUserColumns('password').', '.$this->getUserColumns('salt').', '.$this->getUserColumns('name').
-                ', '.$this->getUserColumns('roles').', '.$this->getUserColumns('time_created').', '.$this->getUserColumns('username').', '.$this->getUserColumns('isEnabled').
-                ', '.$this->getUserColumns('confirmationToken').', '.$this->getUserColumns('timePasswordResetRequested').')
+            ('.$this->getUserColumnsEscaped('email').', '.$this->getUserColumnsEscaped('password').', '.$this->getUserColumnsEscaped('salt').', '.$this->getUserColumnsEscaped('name').
+                ', '.$this->getUserColumnsEscaped('roles').', '.$this->getUserColumnsEscaped('time_created').', '.$this->getUserColumnsEscaped('username').', '.$this->getUserColumnsEscaped('isEnabled').
+                ', '.$this->getUserColumnsEscaped('confirmationToken').', '.$this->getUserColumnsEscaped('timePasswordResetRequested').')
             VALUES (:email, :password, :salt, :name, :roles, :timeCreated, :username, :isEnabled, :confirmationToken, :timePasswordResetRequested) ';
 
         $params = array(
@@ -542,17 +543,17 @@ class UserManager implements UserProviderInterface
         $this->dispatcher->dispatch(UserEvents::BEFORE_UPDATE, new UserEvent($user));
 
         $sql = 'UPDATE ' . $this->conn->quoteIdentifier($this->userTableName). '
-            SET '.$this->getUserColumns('email').' = :email
-            , '.$this->getUserColumns('password').' = :password
-            , '.$this->getUserColumns('salt').' = :salt
-            , '.$this->getUserColumns('name').' = :name
-            , '.$this->getUserColumns('roles').' = :roles
-            , '.$this->getUserColumns('time_created').' = :timeCreated
-            , '.$this->getUserColumns('username').' = :username
-            , '.$this->getUserColumns('isEnabled').' = :isEnabled
-            , '.$this->getUserColumns('confirmationToken').' = :confirmationToken
-            , '.$this->getUserColumns('timePasswordResetRequested').' = :timePasswordResetRequested
-            WHERE '.$this->getUserColumns('id').' = :id';
+            SET '.$this->getUserColumnsEscaped('email').' = :email
+            , '.$this->getUserColumnsEscaped('password').' = :password
+            , '.$this->getUserColumnsEscaped('salt').' = :salt
+            , '.$this->getUserColumnsEscaped('name').' = :name
+            , '.$this->getUserColumnsEscaped('roles').' = :roles
+            , '.$this->getUserColumnsEscaped('time_created').' = :timeCreated
+            , '.$this->getUserColumnsEscaped('username').' = :username
+            , '.$this->getUserColumnsEscaped('isEnabled').' = :isEnabled
+            , '.$this->getUserColumnsEscaped('confirmationToken').' = :confirmationToken
+            , '.$this->getUserColumnsEscaped('timePasswordResetRequested').' = :timePasswordResetRequested
+            WHERE '.$this->getUserColumnsEscaped('id').' = :id';
 
         $params = array(
             'email' => $user->getEmail(),
@@ -581,11 +582,11 @@ class UserManager implements UserProviderInterface
     protected function saveUserCustomFields(User $user)
     {
         $this->conn->executeUpdate('DELETE FROM ' . $this->conn->quoteIdentifier($this->userCustomFieldsTableName). ' 
-            WHERE '.$this->getUserColumns('user_id').' = ?', array($user->getId()));
+            WHERE '.$this->getUserColumnsEscaped('user_id').' = ?', array($user->getId()));
 
         foreach ($user->getCustomFields() as $attribute => $value) {
             $this->conn->executeUpdate('INSERT INTO ' . $this->conn->quoteIdentifier($this->userCustomFieldsTableName). 
-                    ' ('.$this->getUserColumns('user_id').', '.$this->getUserColumns('attribute').', '.$this->getUserColumns('value').') VALUES (?, ?, ?) ',
+                    ' ('.$this->getUserColumnsEscaped('user_id').', '.$this->getUserColumnsEscaped('attribute').', '.$this->getUserColumnsEscaped('value').') VALUES (?, ?, ?) ',
                 array($user->getId(), $attribute, $value));
         }
     }
@@ -706,22 +707,33 @@ class UserManager implements UserProviderInterface
     }
 
     public function setUserColumns(array $userColumns){
-        $conn = $this->conn;
-        //Escape the column names
-
-        $escapedUserColumns = array_map(function($column) use ($conn){
-            return $conn->quoteIdentifier($column,\PDO::PARAM_STR);
-        }, $userColumns);
-
         //Merge the existing column names
-        $this->userColumns = array_merge($this->userColumns, $escapedUserColumns);
+        $this->userColumns = array_merge($this->userColumns, $userColumns);
     }
 
-    public function getUserColumns($column = ""){
-        if ($column == "") return $this->userColumns;
+    public function getUserColumns($column = null){
+        if ($column === null) return $this->userColumns;
         else return $this->userColumns[$column];
     }
 
+    public function getUserColumnsEscaped($column = null)
+    {
+        $userColumns = $this->getUserColumns();
+        
+        $conn = $this->conn;
+
+        if ($column === null){
+            $columns = $userColumns;
+            $escapedColumns = array_map(function($column) use ($conn){
+                return $conn->quoteIdentifier($column,\PDO::PARAM_STR);
+            }, $columns);
+            
+            return $escapedColumns;
+        }
+        else 
+            return $conn->quoteIdentifier($userColumns[$column],\PDO::PARAM_STR);
+    }
+    
     public function setUserCustomFieldsTableName($userCustomFieldsTableName)
     {
         $this->userCustomFieldsTableName = $userCustomFieldsTableName;
